@@ -14,9 +14,29 @@ class MainActivity : AppCompatActivity() {
 
     private val PERMISSIONS_REQUEST_CODE = 100
 
+    // 画像の情報を取得する
+    val resolver = contentResolver
+    val cursor = resolver.query(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
+        null, // 項目(null = 全項目)
+        null, // フィルタ条件(null = フィルタなし)
+        null, // フィルタ用パラメータ
+        null // ソート (null ソートなし)
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // 画像の情報を取得する
+        val resolver = contentResolver
+        val cursor = resolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
+            null, // 項目(null = 全項目)
+            null, // フィルタ条件(null = フィルタなし)
+            null, // フィルタ用パラメータ
+            null // ソート (null ソートなし)
+        )
 
         // Android 6.0以降の場合
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -30,15 +50,6 @@ class MainActivity : AppCompatActivity() {
             // Android 5系以下の場合
         }
 
-        // 画像の情報を取得する
-        val resolver = contentResolver
-        val cursor = resolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
-            null, // 項目(null = 全項目)
-            null, // フィルタ条件(null = フィルタなし)
-            null, // フィルタ用パラメータ
-            null // ソート (null ソートなし)
-        )
 
 
         start_button.setOnClickListener {
@@ -63,15 +74,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getContentsInfo() {
-        // 画像の情報を取得する
-        val resolver = contentResolver
-        val cursor = resolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
-            null, // 項目(null = 全項目)
-            null, // フィルタ条件(null = フィルタなし)
-            null, // フィルタ用パラメータ
-            null // ソート (null ソートなし)
-        )
 
         if (cursor.moveToNext()) {
             // 次に進む
@@ -99,15 +101,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getContentsInfoback() {
-        // 画像の情報を取得する
-        val resolver = contentResolver
-        val cursor = resolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
-            null, // 項目(null = 全項目)
-            null, // フィルタ条件(null = フィルタなし)
-            null, // フィルタ用パラメータ
-            null // ソート (null ソートなし)
-        )
 
         if (cursor!!.moveToPrevious()) {
             // ひとつ前に戻る
