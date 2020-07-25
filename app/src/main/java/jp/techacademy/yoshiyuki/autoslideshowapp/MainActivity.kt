@@ -16,6 +16,14 @@ class MainActivity : AppCompatActivity() {
 
     // カーソル宣言
         val cursor = null
+  //      val cursor = resolver.query(
+  //      MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
+  //      null, // 項目(null = 全項目)
+  //        null, // フィルタ条件(null = フィルタなし)
+  //      null, // フィルタ用パラメータ
+  //      null // ソート (null ソートなし)
+  //  )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,29 +68,22 @@ class MainActivity : AppCompatActivity() {
     private fun getContentsInfo() {
 
         val resolver = contentResolver
-        val cursor = resolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
-            null, // 項目(null = 全項目)
-            null, // フィルタ条件(null = フィルタなし)
-            null, // フィルタ用パラメータ
-            null // ソート (null ソートなし)
-        )
 
-        if (cursor.moveToNext()) {
+        if (this.cursor.moveToNext()) {
             // 次に進む
-            if(cursor.moveToNext()) {
-                cursor.moveToNext()
-                val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-                val id = cursor.getLong(fieldIndex)
+            if(this.cursor.moveToNext()) {
+                this.cursor.moveToNext()
+                val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = this.cursor.getLong(fieldIndex)
                 val imageUri =
                     ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
                 imageView.setImageURI(imageUri)
             }else{
                 //最初に戻る
-                cursor.moveToFirst()
-                val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-                val id = cursor.getLong(fieldIndex)
+                this.cursor.moveToFirst()
+                val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = this.cursor.getLong(fieldIndex)
                 val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
                 imageView.setImageURI(imageUri)
@@ -90,35 +91,28 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-        cursor.close()
+        this.cursor.close()
     }
 
     private fun getContentsInfoback() {
 
         val resolver = contentResolver
-        val cursor = resolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
-            null, // 項目(null = 全項目)
-            null, // フィルタ条件(null = フィルタなし)
-            null, // フィルタ用パラメータ
-            null // ソート (null ソートなし)
-        )
 
-        if (cursor!!.moveToPrevious()) {
+        if (this.cursor!!.moveToPrevious()) {
             // ひとつ前に戻る
-            cursor.moveToPrevious()
-            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = cursor.getLong(fieldIndex)
+            this.cursor.moveToPrevious()
+            val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = thsi.cursor.getLong(fieldIndex)
             val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
             imageView.setImageURI(imageUri)
         }else{
             //最後に戻る
-            cursor.moveToLast()
-            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = cursor.getLong(fieldIndex)
+            this.cursor.moveToLast()
+            val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = this.cursor.getLong(fieldIndex)
             val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
         }
-        cursor.close()
+        this.cursor.close()
     }
 }
