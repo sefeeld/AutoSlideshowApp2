@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.Log
 import android.provider.MediaStore
 import android.content.ContentUris
+import android.database.Cursor
 import android.os.Handler
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,9 +17,9 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private val PERMISSIONS_REQUEST_CODE = 100
-
     // カーソル宣言
-    var cursor = null
+    private val cursor: Cursor? = null
+
   //      val cursor = resolver.query(
   //      MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
   //      null, // 項目(null = 全項目)
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
 
         start_button.setOnClickListener {
-            getContentsInfo_next()
+            contentsinfo_Next()
         }
 
         back_button.setOnClickListener {
@@ -99,41 +100,41 @@ class MainActivity : AppCompatActivity() {
 
         // 画像の情報を取得する
         val resolver = contentResolver
-        this.cursor = resolver.query(
+        var cursor = resolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
             null, // 項目(null = 全項目)
             null, // フィルタ条件(null = フィルタなし)
             null, // フィルタ用パラメータ
             null // ソート (null ソートなし)
-        ) as Nothing?
+        )
 
             // 最初の画像を表示する
-            this.cursor.moveToFirst()
-            val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = this.cursor.getLong(fieldIndex)
+            cursor.moveToFirst()
+            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = cursor.getLong(fieldIndex)
             val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
             imageView.setImageURI(imageUri)
 
     }
 
-    private fun getContentsInfo_next() {
+    private fun contentsinfo_Next() {
 
 
-            if(this.cursor.moveToNext()) {
+            if(cursor!!.moveToNext()) {
                 // 次に進む
-                this.cursor.moveToNext()
-                val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
-                val id = this.cursor.getLong(fieldIndex)
+                cursor.moveToNext()
+                val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = cursor.getLong(fieldIndex)
                 val imageUri =
                     ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
                 imageView.setImageURI(imageUri)
             }else{
                 //最初に戻る
-                this.cursor.moveToFirst()
-                val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
-                val id = this.cursor.getLong(fieldIndex)
+                cursor.moveToFirst()
+                val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = cursor.getLong(fieldIndex)
                 val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
                 imageView.setImageURI(imageUri)
@@ -144,19 +145,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun getContentsInfo_back() {
 
-        if (this.cursor.moveToPrevious()) {
+        if (cursor!!.moveToPrevious()) {
             // ひとつ前に戻る
-            this.cursor.moveToPrevious()
-            val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = this.cursor.getLong(fieldIndex)
+            cursor.moveToPrevious()
+            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = cursor.getLong(fieldIndex)
             val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
             imageView.setImageURI(imageUri)
         }else{
             //最後に戻る
-            this.cursor.moveToLast()
-            val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = this.cursor.getLong(fieldIndex)
+            cursor.moveToLast()
+            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = cursor.getLong(fieldIndex)
             val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
             imageView.setImageURI(imageUri)
@@ -164,6 +165,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getContentsInfo_saisei() {
+        //再生ボタンクリック時
         // タイマーの作成
         mTimer = Timer()
 
@@ -172,35 +174,42 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
                 mTimerSec += 0.1
                 mHandler.post {
-                    if (this.cursor!!.moveToFirst()) {
+                    if (cursor!!.moveToFirst()) {
                         do {
                             // indexからIDを取得し、そのIDから画像のURIを取得する
-                            val fieldIndex = this.cursor.getColumnIndex(MediaStore.Images.Media._ID)
-                            val id = this.cursor.getLong(fieldIndex)
+                            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
+                            val id = cursor.getLong(fieldIndex)
                             val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
                             imageView.setImageURI(imageUri)
-                        } while (this.cursor.moveToNext())
+                        } while (cursor.moveToNext())
                     }
                 }
             }
         }, 100, 2000) // 最初に始動させるまで 2000ミリ秒、ループの間隔を 2000ミリ秒 に設定
 
         saisei_button.text="停止"
-        saisei_button.id = "@+id/teishi_button"
+  //    saisei_button.id = "@+id/teishi_button"
         start_button.isClickable = false
         back_button.isClickable = false
     }
 
     private fun getContentsInfo_teishi() {
 
+        //停止ボタンクリック時
+
         mTimer!!.cancel()
 
         saisei_button.text="再生"
-        saisei_button.id = "@+id/saisei_button"
+ //     saisei_button.id = "@+id/saisei_button"
         start_button.isClickable = true
         back_button.isClickable = true
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        //終了時
+        cursor?.close()
+    }
 
 }
