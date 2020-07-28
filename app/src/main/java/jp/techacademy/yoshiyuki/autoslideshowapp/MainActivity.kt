@@ -21,14 +21,6 @@ class MainActivity : AppCompatActivity() {
     // カーソル宣言
     private var cursor: Cursor? = null
 
-    //      val cursor = resolver.query(
-    //      MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
-    //      null, // 項目(null = 全項目)
-    //      null, // フィルタ条件(null = フィルタなし)
-    //      null, // フィルタ用パラメータ
-    //      null // ソート (null ソートなし)
-    //  )
-
     var mTimer: Timer? = null
 
     // タイマー用の時間のための変数
