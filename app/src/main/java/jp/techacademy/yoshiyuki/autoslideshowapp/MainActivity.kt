@@ -74,20 +74,10 @@ class MainActivity : AppCompatActivity() {
             getContentsInfo_saisei()
         }
 
-        //       saisei_button.setOnClickListener(this)
-        //       teishi_button.setOnClickListener(this)
 
 
     }
 
-    /*   再生停止の制御（案）
-         override fun onClick(v: View) {
-           if (v.id == R.id.saisei_button) {
-               getContentsInfosaisei()
-           } else if (v.id == R.id.teishi_button) {
-               getContentsInfosaiteishi()
-           }
-       }  */
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -131,7 +121,6 @@ class MainActivity : AppCompatActivity() {
 
         if (cursor!!.moveToNext()) {
             // 次に進む
-            cursor!!.moveToNext()
             val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
             val id = cursor!!.getLong(fieldIndex)
             val imageUri =
@@ -156,7 +145,6 @@ class MainActivity : AppCompatActivity() {
 
         if (cursor!!.moveToPrevious()) {
             // ひとつ前に戻る
-            cursor!!.moveToPrevious()
             val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
             val id = cursor!!.getLong(fieldIndex)
             val imageUri =
@@ -187,19 +175,24 @@ class MainActivity : AppCompatActivity() {
                 override fun run() {
                     mTimerSec += 0.1
                     mHandler.post {
-                        if (cursor!!.moveToFirst()) {
-                            do {
-                                // indexからIDを取得し、そのIDから画像のURIを取得する
-                                val fieldIndex =
-                                    cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
-                                val id = cursor!!.getLong(fieldIndex)
-                                val imageUri = ContentUris.withAppendedId(
-                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                    id
-                                )
+                        if (cursor!!.moveToNext()) {
+                            // 次に進む
+                            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                            val id = cursor!!.getLong(fieldIndex)
+                            val imageUri =
+                                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-                                imageView.setImageURI(imageUri)
-                            } while (cursor!!.moveToNext())
+                            imageView.setImageURI(imageUri)
+                        } else {
+                            //最初に戻る
+                            cursor!!.moveToFirst()
+                            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                            val id = cursor!!.getLong(fieldIndex)
+                            val imageUri =
+                                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+
+                            imageView.setImageURI(imageUri)
+
                         }
                     }
                 }
