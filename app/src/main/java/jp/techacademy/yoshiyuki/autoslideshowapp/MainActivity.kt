@@ -17,16 +17,17 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private val PERMISSIONS_REQUEST_CODE = 100
-    // カーソル宣言
-    private val cursor: Cursor? = null
 
-  //      val cursor = resolver.query(
-  //      MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
-  //      null, // 項目(null = 全項目)
-  //      null, // フィルタ条件(null = フィルタなし)
-  //      null, // フィルタ用パラメータ
-  //      null // ソート (null ソートなし)
-  //  )
+    // カーソル宣言
+    private var cursor: Cursor? = null
+
+    //      val cursor = resolver.query(
+    //      MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
+    //      null, // 項目(null = 全項目)
+    //      null, // フィルタ条件(null = フィルタなし)
+    //      null, // フィルタ用パラメータ
+    //      null // ソート (null ソートなし)
+    //  )
 
     var mTimer: Timer? = null
 
@@ -49,7 +50,10 @@ class MainActivity : AppCompatActivity() {
                 getContentsInfo()
             } else {
                 // 許可されていないので許可ダイアログを表示する
-                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSIONS_REQUEST_CODE)
+                requestPermissions(
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    PERMISSIONS_REQUEST_CODE
+                )
             }
             // Android 5系以下の場合
             getContentsInfo()
@@ -70,22 +74,26 @@ class MainActivity : AppCompatActivity() {
             getContentsInfo_saisei()
         }
 
- //       saisei_button.setOnClickListener(this)
- //       teishi_button.setOnClickListener(this)
+        //       saisei_button.setOnClickListener(this)
+        //       teishi_button.setOnClickListener(this)
 
 
     }
 
- /*   再生停止の制御（案）
-      override fun onClick(v: View) {
-        if (v.id == R.id.saisei_button) {
-            getContentsInfosaisei()
-        } else if (v.id == R.id.teishi_button) {
-            getContentsInfosaiteishi()
-        }
-    }  */
+    /*   再生停止の制御（案）
+         override fun onClick(v: View) {
+           if (v.id == R.id.saisei_button) {
+               getContentsInfosaisei()
+           } else if (v.id == R.id.teishi_button) {
+               getContentsInfosaiteishi()
+           }
+       }  */
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             PERMISSIONS_REQUEST_CODE ->
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -100,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 
         // 画像の情報を取得する
         val resolver = contentResolver
-        var cursor = resolver.query(
+        cursor = resolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
             null, // 項目(null = 全項目)
             null, // フィルタ条件(null = フィルタなし)
@@ -108,38 +116,39 @@ class MainActivity : AppCompatActivity() {
             null // ソート (null ソートなし)
         )
 
-            // 最初の画像を表示する
-            cursor.moveToFirst()
-            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = cursor.getLong(fieldIndex)
-            val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+        // 最初の画像を表示する
+        cursor!!.moveToFirst()
+        val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+        val id = cursor!!.getLong(fieldIndex)
+        val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-            imageView.setImageURI(imageUri)
+        imageView.setImageURI(imageUri)
 
     }
 
     private fun contentsinfo_Next() {
 
 
-            if(cursor!!.moveToNext()) {
-                // 次に進む
-                cursor.moveToNext()
-                val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-                val id = cursor.getLong(fieldIndex)
-                val imageUri =
-                    ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+        if (cursor!!.moveToNext()) {
+            // 次に進む
+            cursor!!.moveToNext()
+            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = cursor!!.getLong(fieldIndex)
+            val imageUri =
+                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-                imageView.setImageURI(imageUri)
-            }else{
-                //最初に戻る
-                cursor.moveToFirst()
-                val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-                val id = cursor.getLong(fieldIndex)
-                val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+            imageView.setImageURI(imageUri)
+        } else {
+            //最初に戻る
+            cursor!!.moveToFirst()
+            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = cursor!!.getLong(fieldIndex)
+            val imageUri =
+                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-                imageView.setImageURI(imageUri)
+            imageView.setImageURI(imageUri)
 
-            }
+        }
 
     }
 
@@ -147,69 +156,76 @@ class MainActivity : AppCompatActivity() {
 
         if (cursor!!.moveToPrevious()) {
             // ひとつ前に戻る
-            cursor.moveToPrevious()
-            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = cursor.getLong(fieldIndex)
-            val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+            cursor!!.moveToPrevious()
+            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = cursor!!.getLong(fieldIndex)
+            val imageUri =
+                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
             imageView.setImageURI(imageUri)
-        }else{
+        } else {
             //最後に戻る
-            cursor.moveToLast()
-            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = cursor.getLong(fieldIndex)
-            val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+            cursor!!.moveToLast()
+            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = cursor!!.getLong(fieldIndex)
+            val imageUri =
+                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
             imageView.setImageURI(imageUri)
         }
     }
 
     private fun getContentsInfo_saisei() {
-        //再生ボタンクリック時
-        // タイマーの作成
-        mTimer = Timer()
 
-        // タイマーの始動
-        mTimer!!.schedule(object : TimerTask() {
-            override fun run() {
-                mTimerSec += 0.1
-                mHandler.post {
-                    if (cursor!!.moveToFirst()) {
-                        do {
-                            // indexからIDを取得し、そのIDから画像のURIを取得する
-                            val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
-                            val id = cursor.getLong(fieldIndex)
-                            val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+        if (saisei_button.text == "再生") {
+            //再生ボタンクリック時
+            // タイマーの作成
+            mTimer = Timer()
 
-                            imageView.setImageURI(imageUri)
-                        } while (cursor.moveToNext())
+            // タイマーの始動
+            mTimer!!.schedule(object : TimerTask() {
+                override fun run() {
+                    mTimerSec += 0.1
+                    mHandler.post {
+                        if (cursor!!.moveToFirst()) {
+                            do {
+                                // indexからIDを取得し、そのIDから画像のURIを取得する
+                                val fieldIndex =
+                                    cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                                val id = cursor!!.getLong(fieldIndex)
+                                val imageUri = ContentUris.withAppendedId(
+                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                    id
+                                )
+
+                                imageView.setImageURI(imageUri)
+                            } while (cursor!!.moveToNext())
+                        }
                     }
                 }
-            }
-        }, 100, 2000) // 最初に始動させるまで 2000ミリ秒、ループの間隔を 2000ミリ秒 に設定
+            }, 100, 2000) // 最初に始動させるまで 2000ミリ秒、ループの間隔を 2000ミリ秒 に設定
 
-        saisei_button.text="停止"
-  //    saisei_button.id = "@+id/teishi_button"
-        start_button.isClickable = false
-        back_button.isClickable = false
+            saisei_button.text = "停止"
+            start_button.isClickable = false
+            back_button.isClickable = false
+        } else {
+            //停止ボタンクリック時
+
+            mTimer!!.cancel()
+
+            saisei_button.text = "再生"
+            start_button.isClickable = true
+            back_button.isClickable = true
+        }
+
+
     }
 
-    private fun getContentsInfo_teishi() {
-
-        //停止ボタンクリック時
-
-        mTimer!!.cancel()
-
-        saisei_button.text="再生"
- //     saisei_button.id = "@+id/saisei_button"
-        start_button.isClickable = true
-        back_button.isClickable = true
-    }
 
     override fun onDestroy() {
         super.onDestroy()
         //終了時
-        cursor?.close()
+        cursor!!.close()
     }
 
 }
