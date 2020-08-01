@@ -47,9 +47,13 @@ class MainActivity : AppCompatActivity() {
                     PERMISSIONS_REQUEST_CODE
                 )
             }
+
+        }else{
             // Android 5系以下の場合
             getContentsInfo()
         }
+
+
 
 
 
