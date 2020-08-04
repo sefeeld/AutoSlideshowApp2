@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-        }else{
+        } else {
             // Android 5系以下の場合
             getContentsInfo()
         }
@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
         saisei_button.setOnClickListener {
             getContentsInfo_saisei()
         }
-
 
 
     }
@@ -103,12 +102,17 @@ class MainActivity : AppCompatActivity() {
         )
 
         // 最初の画像を表示する
-        cursor!!.moveToFirst()
-        val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
-        val id = cursor!!.getLong(fieldIndex)
-        val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+        if (cursor!!.moveToFirst()) {
+            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+            val id = cursor!!.getLong(fieldIndex)
+            val imageUri =
+                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-        imageView.setImageURI(imageUri)
+            imageView.setImageURI(imageUri)
+        } else {
+            //     最初の画像がなければカーソルクローズ
+            cursor!!.close()
+        }
 
     }
 
@@ -176,7 +180,10 @@ class MainActivity : AppCompatActivity() {
                             val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
                             val id = cursor!!.getLong(fieldIndex)
                             val imageUri =
-                                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+                                ContentUris.withAppendedId(
+                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                    id
+                                )
 
                             imageView.setImageURI(imageUri)
                         } else {
@@ -185,7 +192,10 @@ class MainActivity : AppCompatActivity() {
                             val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
                             val id = cursor!!.getLong(fieldIndex)
                             val imageUri =
-                                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+                                ContentUris.withAppendedId(
+                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                    id
+                                )
 
                             imageView.setImageURI(imageUri)
 
