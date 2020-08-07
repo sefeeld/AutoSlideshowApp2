@@ -118,48 +118,51 @@ class MainActivity : AppCompatActivity() {
 
     private fun contentsinfo_Next() {
 
-
-        if (cursor!!.moveToNext()) {
-            // 次に進む
-            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = cursor!!.getLong(fieldIndex)
-            val imageUri =
-                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-
-            imageView.setImageURI(imageUri)
+        if (cursor!!.isClosed()) {
         } else {
-            //最初に戻る
-            cursor!!.moveToFirst()
-            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = cursor!!.getLong(fieldIndex)
-            val imageUri =
-                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+            if (cursor!!.moveToNext()) {
+                // 次に進む
+                val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = cursor!!.getLong(fieldIndex)
+                val imageUri =
+                    ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-            imageView.setImageURI(imageUri)
+                imageView.setImageURI(imageUri)
+            } else {
+                //最初に戻る
+                cursor!!.moveToFirst()
+                val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = cursor!!.getLong(fieldIndex)
+                val imageUri =
+                    ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
+                imageView.setImageURI(imageUri)
+
+            }
         }
-
     }
 
     private fun getContentsInfo_back() {
-
-        if (cursor!!.moveToPrevious()) {
-            // ひとつ前に戻る
-            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = cursor!!.getLong(fieldIndex)
-            val imageUri =
-                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-
-            imageView.setImageURI(imageUri)
+        if (cursor!!.isClosed()) {
         } else {
-            //最後に戻る
-            cursor!!.moveToLast()
-            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
-            val id = cursor!!.getLong(fieldIndex)
-            val imageUri =
-                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+            if (cursor!!.moveToPrevious()) {
+                // ひとつ前に戻る
+                val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = cursor!!.getLong(fieldIndex)
+                val imageUri =
+                    ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-            imageView.setImageURI(imageUri)
+                imageView.setImageURI(imageUri)
+            } else {
+                //最後に戻る
+                cursor!!.moveToLast()
+                val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = cursor!!.getLong(fieldIndex)
+                val imageUri =
+                    ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+
+                imageView.setImageURI(imageUri)
+            }
         }
     }
 
@@ -175,30 +178,35 @@ class MainActivity : AppCompatActivity() {
                 override fun run() {
                     mTimerSec += 0.1
                     mHandler.post {
-                        if (cursor!!.moveToNext()) {
-                            // 次に進む
-                            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
-                            val id = cursor!!.getLong(fieldIndex)
-                            val imageUri =
-                                ContentUris.withAppendedId(
-                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                    id
-                                )
-
-                            imageView.setImageURI(imageUri)
+                        if (cursor!!.isClosed()) {
                         } else {
-                            //最初に戻る
-                            cursor!!.moveToFirst()
-                            val fieldIndex = cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
-                            val id = cursor!!.getLong(fieldIndex)
-                            val imageUri =
-                                ContentUris.withAppendedId(
-                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                    id
-                                )
+                            if (cursor!!.moveToNext()) {
+                                // 次に進む
+                                val fieldIndex =
+                                    cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                                val id = cursor!!.getLong(fieldIndex)
+                                val imageUri =
+                                    ContentUris.withAppendedId(
+                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                        id
+                                    )
 
-                            imageView.setImageURI(imageUri)
+                                imageView.setImageURI(imageUri)
+                            } else {
+                                //最初に戻る
+                                cursor!!.moveToFirst()
+                                val fieldIndex =
+                                    cursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                                val id = cursor!!.getLong(fieldIndex)
+                                val imageUri =
+                                    ContentUris.withAppendedId(
+                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                        id
+                                    )
 
+                                imageView.setImageURI(imageUri)
+
+                            }
                         }
                     }
                 }
